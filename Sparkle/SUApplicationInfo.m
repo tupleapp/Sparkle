@@ -18,7 +18,8 @@
 
 + (BOOL)isBackgroundApplication:(NSApplication *)application
 {
-    return (application.activationPolicy == NSApplicationActivationPolicyAccessory);
+    NSNumber *backgroundApp = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"LSUIElement"];
+    return backgroundApp ? [backgroundApp boolValue] : NO;
 }
 
 + (NSImage *)bestIconForHost:(SUHost *)host
