@@ -526,8 +526,8 @@ NSString *const SUUpdaterAppcastNotificationKey = @"SUUpdaterAppCastNotification
             }
             
             // Now we want to figure out how long until we check again.
-            if (updateCheckInterval < SUMinimumUpdateCheckInterval)
-                updateCheckInterval = SUMinimumUpdateCheckInterval;
+            if (updateCheckInterval < self.minimumUpdateCheckInterval)
+                updateCheckInterval = self.minimumUpdateCheckInterval;
             if (intervalSinceCheck < updateCheckInterval) {
                 NSTimeInterval delayUntilCheck = (updateCheckInterval - intervalSinceCheck); // It hasn't been long enough.
                 if ([delegate respondsToSelector:@selector(updater:willScheduleUpdateCheckAfterDelay:)]) {
@@ -1139,6 +1139,11 @@ static NSString *escapeURLComponent(NSString *str) {
 - (NSTimeInterval)updateCheckInterval
 {
     return [_updaterSettings updateCheckInterval];
+}
+
+- (NSTimeInterval)minimumUpdateCheckInterval
+{
+    return SUMinimumUpdateCheckInterval;
 }
 
 - (void)dealloc

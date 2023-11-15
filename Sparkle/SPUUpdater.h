@@ -214,6 +214,11 @@ SU_EXPORT @interface SPUUpdater : NSObject
 @property (nonatomic) NSTimeInterval updateCheckInterval;
 
 /**
+ Can be overridden by subclasses to provide their own minimum. Defaults to SUMinimumUpdateCheckInterval.
+ */
+@property (nonatomic,readonly) NSTimeInterval minimumUpdateCheckInterval;
+
+/**
  A property indicating whether or not updates can be automatically downloaded in the background.
  
  By default, updates are not automatically downloaded.
