@@ -58,8 +58,11 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
     void(^_completionBlock)(SPUUserUpdateChoice, NSRect, BOOL);
     
     BOOL _allowsAutomaticUpdates;
+    BOOL _showsAutomaticUpdateButton;
     BOOL _observingAppearance;
 }
+
+@synthesize showsAutomaticUpdateButton = _showsAutomaticUpdateButton;
 
 - (instancetype)initWithAppcastItem:(SUAppcastItem *)item state:(SPUUserUpdateState *)state host:(SUHost *)aHost versionDisplayer:(id<SUVersionDisplay>)versionDisplayer completionBlock:(void (^)(SPUUserUpdateChoice, NSRect, BOOL))completionBlock didBecomeKeyBlock:(void (^)(void))didBecomeKeyBlock
 {
@@ -85,7 +88,8 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
             allowsAutomaticUpdates = allowsAutomaticUpdatesOption.boolValue;
         }
         _allowsAutomaticUpdates = allowsAutomaticUpdates;
-        
+        _showsAutomaticUpdateButton = _allowsAutomaticUpdates;
+
         [self setShouldCascadeWindows:NO];
     } else {
         assert(false);
@@ -105,6 +109,12 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
     } else {
         _installButton.keyEquivalent = @"";
     }
+}
+
+- (void)setShowsAutomaticUpdateButton:(BOOL)showsAutomaticUpdateButton
+{
+    assert(![self isWindowLoaded]);
+    _showsAutomaticUpdateButton = showsAutomaticUpdateButton;
 }
 
 - (void)endWithSelection:(SPUUserUpdateChoice)choice SPU_OBJC_DIRECT
@@ -392,14 +402,14 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
         [_installButton setAction:@selector(openInfoURL:)];
     }
 
-    BOOL allowsAutomaticUpdates = _allowsAutomaticUpdates;
-    
+    BOOL showAutomaticUpdateButton = _allowsAutomaticUpdates && _showsAutomaticUpdateButton;
+
     if (showReleaseNotes) {
         [self displayReleaseNotesSpinner];
     } else {
         // When automatic updates aren't allowed we won't show the automatic install updates button
         // This button is removed later below
-        if (allowsAutomaticUpdates) {
+        if (showAutomaticUpdateButton) {
             NSLayoutConstraint *automaticallyInstallUpdatesButtonToDescriptionFieldConstraint = [NSLayoutConstraint constraintWithItem:_automaticallyInstallUpdatesButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_descriptionField attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8.0];
             
             [window.contentView addConstraint:automaticallyInstallUpdatesButtonToDescriptionFieldConstraint];
@@ -412,7 +422,7 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
     
     // When we show release notes, it looks ugly if the install buttons are not closer to the release notes view
     // However when we don't show release notes, it looks ugly if the install buttons are too close to the description field. Shrugs.
-    if (!allowsAutomaticUpdates) {
+    if (!showAutomaticUpdateButton) {
         if (showReleaseNotes) {
             // Fix constraints so that buttons aren't far away from web view when we hide the automatic updates check box
             NSLayoutConstraint *skipButtonToReleaseNotesContainerConstraint = [NSLayoutConstraint constraintWithItem:_skipButton attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_releaseNotesContainerView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:12.0];

@@ -100,6 +100,11 @@ SU_EXPORT @protocol SPUStandardUserDriverDelegate <NSObject>
 @property (nonatomic, readonly) BOOL supportsGentleScheduledUpdateReminders;
 
 /**
+ Allows delegate to hide the "automatic update" preference within the update alert. Default value is YES, if automatic updates are possible.
+ */
+@property (nonatomic, readonly) BOOL supportsModifyingAutoUpdatesInAlert;
+
+/**
  Specifies if the standard user driver should handle showing a new scheduled update, or if its delegate should handle showing the update instead.
  
  If you implement this method and return @c NO the delegate is then responsible for showing the update,

@@ -428,6 +428,10 @@ static const NSTimeInterval SUScheduledUpdateIdleEventLeewayInterval = DEBUG ? 3
         }
     }];
     
+    if ([delegate respondsToSelector:@selector(supportsModifyingAutoUpdatesInAlert)]) {
+        _activeUpdateAlert.showsAutomaticUpdateButton = [delegate supportsModifyingAutoUpdatesInAlert];
+    }
+
     _regularApplicationUpdate = [appcastItem.installationType isEqualToString:SPUInstallationTypeApplication];
     
     // For user initiated checks, let the delegate know we'll be showing an update
