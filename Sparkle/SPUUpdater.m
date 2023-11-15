@@ -549,7 +549,7 @@ NSString *const SUUpdaterAppcastNotificationKey = @"SUUpdaterAppCastNotification
 
 - (void)updaterTimerDidFire
 {
-    [self _checkForUpdatesInBackground];
+    [self checkForUpdatesInBackground];
 }
 
 - (void)_checkForUpdatesInBackground SPU_OBJC_DIRECT
