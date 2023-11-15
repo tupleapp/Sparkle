@@ -745,6 +745,10 @@ static const NSTimeInterval SUScheduledUpdateIdleEventLeewayInterval = DEBUG ? 3
         
         _statusController = [[SUStatusController alloc] initWithHost:_host windowTitle:[NSString stringWithFormat:SULocalizedStringFromTableInBundle(@"Updating %@", SPARKLE_TABLE, SUSparkleBundle(), nil), _host.name] centerPointValue:centerPointValue minimizable:minimizable closable:closable];
         
+        if ([delegate respondsToSelector:@selector(standardUserDriverWillShowStatusWindow:)]) {
+            [delegate standardUserDriverWillShowStatusWindow:(NSWindow*)_statusController.window];
+        }
+
         if (_updateAlertWindowWasInactive) {
             [_statusController.window orderFront:nil];
         } else {

@@ -83,6 +83,11 @@ SU_EXPORT @protocol SPUStandardUserDriverDelegate <NSObject>
 - (BOOL)standardUserDriverAllowsMinimizableStatusWindow;
 
 /**
+ Lets the delegate know the status window will appear.
+ */
+- (void)standardUserDriverWillShowStatusWindow:(NSWindow *)window;
+
+/**
  Declares whether or not gentle scheduled update reminders are supported.
  
  The delegate may implement scheduled update reminders that are presented in a gentle manner by implementing one or both of:
