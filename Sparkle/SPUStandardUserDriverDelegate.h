@@ -11,9 +11,11 @@
 // Ignore incorrect warning
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wquoted-include-in-framework-header"
+#import "SUConstants.h"
 #import "SUExport.h"
 #pragma clang diagnostic pop
 #else
+#import <Sparkle/SUConstants.h>
 #import <Sparkle/SUExport.h>
 #endif
 
@@ -100,9 +102,9 @@ SU_EXPORT @protocol SPUStandardUserDriverDelegate <NSObject>
 @property (nonatomic, readonly) BOOL supportsGentleScheduledUpdateReminders;
 
 /**
- Allows delegate to hide the "automatic update" preference within the update alert. Default value is YES, if automatic updates are possible.
+ Allows delegate to hide the buttons within the update alert. Default value is to only hide buttons which are not applicable.
  */
-@property (nonatomic, readonly) BOOL supportsModifyingAutoUpdatesInAlert;
+- (SUUpdateAlertButtons)hiddenStandardUserDriverButtonsForUpdate:(SUAppcastItem *)item state:(SPUUserUpdateState*)state;
 
 /**
  Specifies if the standard user driver should handle showing a new scheduled update, or if its delegate should handle showing the update instead.

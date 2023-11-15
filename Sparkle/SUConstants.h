@@ -16,6 +16,12 @@
 //	Misc:
 // -----------------------------------------------------------------------------
 
+typedef NS_OPTIONS(short, SUUpdateAlertButtons) {
+    SUUpdateAlertButtonAutomaticUpdates = 1 << 0,
+    SUUpdateAlertButtonSkip             = 1 << 1,
+    SUUpdateAlertButtonLater            = 1 << 2,
+};
+
 extern const NSTimeInterval SUDefaultUpdatePermissionPromptInterval;
 extern const NSTimeInterval SUMinimumUpdateCheckInterval;
 extern const NSTimeInterval SUDefaultUpdateCheckInterval;

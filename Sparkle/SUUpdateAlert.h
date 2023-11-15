@@ -14,6 +14,7 @@
 #import <Cocoa/Cocoa.h>
 #import "SUVersionDisplayProtocol.h"
 #import "SPUUserUpdateState.h"
+#import "SUConstants.h"
 
 @protocol SUUpdateAlertDelegate;
 
@@ -27,7 +28,7 @@ SPU_OBJC_DIRECT_MEMBERS @interface SUUpdateAlert : NSWindowController
 
 - (void)setInstallButtonFocus:(BOOL)focus;
 
-@property(nonatomic) BOOL showsAutomaticUpdateButton;
+@property(nonatomic) SUUpdateAlertButtons hiddenButtons;
 
 @end
 

@@ -428,8 +428,8 @@ static const NSTimeInterval SUScheduledUpdateIdleEventLeewayInterval = DEBUG ? 3
         }
     }];
     
-    if ([delegate respondsToSelector:@selector(supportsModifyingAutoUpdatesInAlert)]) {
-        _activeUpdateAlert.showsAutomaticUpdateButton = [delegate supportsModifyingAutoUpdatesInAlert];
+    if ([delegate respondsToSelector:@selector(hiddenStandardUserDriverButtonsForUpdate:state:)]) {
+        _activeUpdateAlert.hiddenButtons = [delegate hiddenStandardUserDriverButtonsForUpdate:appcastItem state:state];
     }
 
     _regularApplicationUpdate = [appcastItem.installationType isEqualToString:SPUInstallationTypeApplication];

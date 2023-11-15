@@ -58,11 +58,11 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
     void(^_completionBlock)(SPUUserUpdateChoice, NSRect, BOOL);
     
     BOOL _allowsAutomaticUpdates;
-    BOOL _showsAutomaticUpdateButton;
+    SUUpdateAlertButtons _hiddenButtons;
     BOOL _observingAppearance;
 }
 
-@synthesize showsAutomaticUpdateButton = _showsAutomaticUpdateButton;
+@synthesize hiddenButtons = _hiddenButtons;
 
 - (instancetype)initWithAppcastItem:(SUAppcastItem *)item state:(SPUUserUpdateState *)state host:(SUHost *)aHost versionDisplayer:(id<SUVersionDisplay>)versionDisplayer completionBlock:(void (^)(SPUUserUpdateChoice, NSRect, BOOL))completionBlock didBecomeKeyBlock:(void (^)(void))didBecomeKeyBlock
 {
@@ -88,7 +88,6 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
             allowsAutomaticUpdates = allowsAutomaticUpdatesOption.boolValue;
         }
         _allowsAutomaticUpdates = allowsAutomaticUpdates;
-        _showsAutomaticUpdateButton = _allowsAutomaticUpdates;
 
         [self setShouldCascadeWindows:NO];
     } else {
@@ -111,10 +110,10 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
     }
 }
 
-- (void)setShowsAutomaticUpdateButton:(BOOL)showsAutomaticUpdateButton
+- (void)setHiddenButtons:(SUUpdateAlertButtons)hiddenButtons
 {
     assert(![self isWindowLoaded]);
-    _showsAutomaticUpdateButton = showsAutomaticUpdateButton;
+    _hiddenButtons = hiddenButtons;
 }
 
 - (void)endWithSelection:(SPUUserUpdateChoice)choice SPU_OBJC_DIRECT
@@ -402,7 +401,7 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
         [_installButton setAction:@selector(openInfoURL:)];
     }
 
-    BOOL showAutomaticUpdateButton = _allowsAutomaticUpdates && _showsAutomaticUpdateButton;
+    BOOL showAutomaticUpdateButton = _allowsAutomaticUpdates && (_hiddenButtons & SUUpdateAlertButtonAutomaticUpdates) == 0;
 
     if (showReleaseNotes) {
         [self displayReleaseNotesSpinner];
@@ -458,6 +457,14 @@ static NSString *const SUUpdateAlertTouchBarIndentifier = @"" SPARKLE_BUNDLE_IDE
         _laterButton.hidden = YES;
     }
 
+    if ((_hiddenButtons & SUUpdateAlertButtonSkip) != 0) {
+        _skipButton.hidden = YES;
+    }
+    
+    if ((_hiddenButtons & SUUpdateAlertButtonLater) != 0) {
+        _laterButton.hidden = YES;
+    }
+    
     [window center];
 }
 
