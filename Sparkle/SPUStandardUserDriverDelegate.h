@@ -6,7 +6,7 @@
 //  Copyright © 2016 Sparkle Project. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <AppKit/AppKit.h>
 #if defined(BUILDING_SPARKLE_SOURCES_EXTERNALLY)
 // Ignore incorrect warning
 #pragma clang diagnostic push
@@ -33,16 +33,9 @@ SU_EXPORT @protocol SPUStandardUserDriverDelegate <NSObject>
 @optional
 
 /**
- Called before showing a modal alert window,
- to give the opportunity to hide attached windows that may get in the way.
+ Allows the delegate to show an alert. If not implemented, the alert will be shown modally.
  */
-- (void)standardUserDriverWillShowModalAlert;
-
-/**
- Called after showing a modal alert window,
- to give the opportunity to hide attached windows that may get in the way.
- */
-- (void)standardUserDriverDidShowModalAlert;
+- (void)showAlert:(NSAlert *)alert withActionHandler:(void (^)(NSModalResponse))actionHandler;
 
 /**
  Returns an object that formats version numbers for display to the user.

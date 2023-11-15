@@ -700,21 +700,19 @@ static const NSTimeInterval SUScheduledUpdateIdleEventLeewayInterval = DEBUG ? 3
 
 - (void)showAlert:(NSAlert *)alert secondaryAction:(void (^ _Nullable)(void))secondaryAction SPU_OBJC_DIRECT
 {
-    id <SPUStandardUserDriverDelegate> delegate = _delegate;
-    
-    if ([delegate respondsToSelector:@selector(standardUserDriverWillShowModalAlert)]) {
-        [delegate standardUserDriverWillShowModalAlert];
-    }
-    
     [alert setIcon:[SUApplicationInfo bestIconForHost:_host]];
     
-    NSModalResponse response = [alert runModal];
-    if (response == NSAlertSecondButtonReturn && secondaryAction != nil) {
-        secondaryAction();
-    }
-    
-    if ([delegate respondsToSelector:@selector(standardUserDriverDidShowModalAlert)]) {
-        [delegate standardUserDriverDidShowModalAlert];
+    void (^actionHandler)(NSModalResponse) = ^(NSModalResponse response) {
+        if (response == NSAlertSecondButtonReturn && secondaryAction != nil) {
+            secondaryAction();
+        }
+    };
+
+    id <SPUStandardUserDriverDelegate> delegate = _delegate;
+    if ([delegate respondsToSelector:@selector(showAlert:withActionHandler:)]) {
+        [delegate showAlert:alert withActionHandler:actionHandler];
+    } else {
+        actionHandler([alert runModal]);
     }
 }
 
