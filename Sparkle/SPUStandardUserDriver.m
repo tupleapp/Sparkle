@@ -351,6 +351,16 @@ static const NSTimeInterval SUScheduledUpdateIdleEventLeewayInterval = DEBUG ? 3
     [self closeCheckingWindow];
     
     id<SPUStandardUserDriverDelegate> delegate = _delegate;
+
+    if ([delegate respondsToSelector:@selector(inferredStandardUserDriverChoiceForShowingUpdate:state:choice:)]) {
+        SPUUserUpdateChoice choice = SPUUserUpdateChoiceSkip;
+
+        if ([delegate inferredStandardUserDriverChoiceForShowingUpdate:appcastItem state:state choice:&choice]) {
+            reply(choice);
+            return;
+        }
+    }
+
     id<SUVersionDisplay> customVersionDisplayer = nil;
     
     if ([delegate respondsToSelector:@selector(standardUserDriverRequestsVersionDisplayer)]) {

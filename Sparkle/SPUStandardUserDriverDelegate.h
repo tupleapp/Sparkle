@@ -13,10 +13,12 @@
 #pragma clang diagnostic ignored "-Wquoted-include-in-framework-header"
 #import "SUConstants.h"
 #import "SUExport.h"
+#import "SPUUserUpdateState.h"
 #pragma clang diagnostic pop
 #else
 #import <Sparkle/SUConstants.h>
 #import <Sparkle/SUExport.h>
+#import <Sparkle/SPUUserUpdateState.h>
 #endif
 
 NS_ASSUME_NONNULL_BEGIN
@@ -137,6 +139,13 @@ SU_EXPORT @protocol SPUStandardUserDriverDelegate <NSObject>
  @return @c YES if the standard user should handle showing the scheduled update (default behavior), otherwise @c NO if the delegate handles showing it.
  */
 - (BOOL)standardUserDriverShouldHandleShowingScheduledUpdate:(SUAppcastItem *)update andInImmediateFocus:(BOOL)immediateFocus;
+
+/**
+ Default value is NO. if the delgate returns YES, we'll bypass showing the update with the choice (which defaults to skip).
+ 
+ This makes it possible to skip steps in the normal UI flow if we're installing an update that we know about  (gentle reminders)
+ */
+- (BOOL)inferredStandardUserDriverChoiceForShowingUpdate:(SUAppcastItem *)update state:(SPUUserUpdateState *)state choice:(SPUUserUpdateChoice *)outChoice;
 
 /**
  Called before an update will be shown to the user.
